@@ -45,10 +45,10 @@ function Tracer:Bind(object, highlightobject)
 	part.CanCollide = false
 	
 	local Line = Drawing.new("Line")
-	Line.Visible = true
+	Line.Visible = false
 	Line.Thickness = 2
-	Line.Transparency = 0
-	Line.ZIndex = math.huge
+	Line.Transparency = 1
+	Line.ZIndex = 1
 	
 	if self.HighlightEnabled then
 		self.Highlight = Instance.new("Highlight", (highlightobject or object))
