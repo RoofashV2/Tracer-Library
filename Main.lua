@@ -17,8 +17,14 @@ end
 Module.new = function(highlightenabled)
 	local self = setmetatable({}, Tracer)
 
-	local UI = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
+	local UI = Instance.new("ScreenGui")
 	UI.ResetOnSpawn = false
+	
+	if game.CoreGui then
+		UI.Parent = game.CoreGui
+	else
+		UI.Parent = LocalPlayer.PlayerGui
+	end
 
 	local ViewportFrame = Instance.new("ViewportFrame", UI)
 	ViewportFrame.Size = UDim2.new(1, 0, 1, 0)
@@ -44,7 +50,7 @@ function Tracer:Bind(object, highlightobject)
 	end
 	
 	self.Disconnected = false
-	self.Running = false
+	self.Running = true
 	self.Target = object
 	self.TracerId = HttpService:GenerateGUID(false)
 	self.Color = Color3.fromRGB(255, 255, 255)
@@ -55,23 +61,21 @@ function Tracer:Bind(object, highlightobject)
 	part.Anchored = true
 	part.CanCollide = false
 	
-	local parent = nil do
-		if self.HighlightEnabled then
-			parent = (highlightobject or object)
-			print('enabled')
-		end
+	if self.HighlightEnabled then
+		self.Highlight = Instance.new("Highlight", (highlightobject or object))
+		self.Highlight.FillTransparency = 1
+		self.Highlight.OutlineColor = self.Color
 	end
-	local Highlight = Instance.new("Highlight", parent)
-	Highlight.FillTransparency = 1
-	Highlight.OutlineColor = self.Color
 
 	self.TracerPart = part
 	function self:CleanUp()
 		if not self.Disconnect then
 			error("CleanUp can only be called once disconnected.")
+			return
 		end
-		Highlight:Destroy()
+		self.Highlight:Destroy()
 		part:Destroy()
+		self.UI:Destroy()
 	end
 	
 	RunService:BindToRenderStep(self.TracerId, Enum.RenderPriority.First.Value, function()
@@ -80,7 +84,9 @@ function Tracer:Bind(object, highlightobject)
 		end
 		
 		part.Color = self.Color
-		Highlight.OutlineColor = self.Color
+		if self.Highlight then
+			self.Highlight.OutlineColor = self.Color
+		end
 		
 		local target = self.Target
 		local pos = (Root.Position - object.Position)
@@ -93,14 +99,6 @@ function Tracer:Bind(object, highlightobject)
 	
 	return self
 end
-
---[[
-function TracerFunctions:SetTarget(new)
-	assert(isInstance(new), "Expected Instance, got " .. type(new) .. ".")
-	
-	self.Target = new
-end
-]]
 
 function TracerFunctions:Start()
 	self.Running = true
