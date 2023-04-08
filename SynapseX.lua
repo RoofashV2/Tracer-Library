@@ -69,7 +69,7 @@ function Tracer:Bind(object, highlightobject)
 	
 	RunService:BindToRenderStep(self.TracerId, Enum.RenderPriority.First.Value, function()
 		local CurrentCamera = workspace.CurrentCamera
-		local From, To = CurrentCamera:WorldToViewportPoint(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y), CurrentCamera:WorldToViewportPoint(self.Target.Position)
+		local From, To = {X = CurrentCamera.ViewportSize.X / 2, Y = CurrentCamera.ViewportSize.Y}, CurrentCamera:WorldToViewportPoint(self.Target.Position)
 		Line.Color = self.Color
 		
 		Line.From = Vector2.new(From.X, From.Y)
