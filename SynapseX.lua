@@ -68,12 +68,17 @@ function Tracer:Bind(object, highlightobject)
 	end
 	
 	RunService:BindToRenderStep(self.TracerId, Enum.RenderPriority.First.Value, function()
-		local CurrentCamera = workspace.CurrentCamera
-		local From, To = {X = CurrentCamera.ViewportSize.X / 2, Y = CurrentCamera.ViewportSize.Y}, CurrentCamera:WorldToViewportPoint(self.Target.Position)
-		Line.Color = self.Color
-		
-		Line.From = Vector2.new(From.X, From.Y)
-		Line.To = Vector2.new(To.X, To.Y)
+		local success, result = pcall(function()
+			local CurrentCamera = workspace.CurrentCamera
+			local To = CurrentCamera:WorldToViewportPoint(self.Target.Position)
+			Line.Color = self.Color
+
+			Line.From = Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y)
+			Line.To = Vector2.new(To.X, To.Y)
+		end)
+		if not success then
+			error(result)
+		end
 	end)
 	
 	return self
