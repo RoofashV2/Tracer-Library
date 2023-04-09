@@ -73,7 +73,7 @@ function Tracer:Bind(object, highlightobject)
 		self.Highlight = Instance.new("Highlight", self.Holder)
 		self.Highlight.FillTransparency = 1
 		self.Highlight.OutlineColor = self.Color
-		self.Highlight.Adornee = self.Target
+		self.Highlight.Adornee = (highlightobject or self.Target)
 	else
 		self.Highlight:Destroy()
 	end
@@ -96,6 +96,10 @@ function Tracer:Bind(object, highlightobject)
 
 		if self.Highlight then
 			self.Highlight.OutlineColor = self.Color
+		end
+		
+		if self.Highlight.Adornee ~= (highlightobject or self.Target) then
+			self.Highlight.Adornee = (highlightobject or self.Target)
 		end
 
 		if self.Label.Text ~= "" then
