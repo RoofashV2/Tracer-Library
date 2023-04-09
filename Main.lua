@@ -45,6 +45,7 @@ end
 
 function Tracer:Bind(object, highlightobject)
 	if ESP[object] then
+		print(object, "has esp")
 		return ESP[object] -- self
 	end
 	
@@ -105,9 +106,7 @@ function Tracer:Bind(object, highlightobject)
 			self.Highlight.OutlineColor = self.Color
 		end
 		
-		if self.Highlight.Adornee ~= (highlightobject or self.Target) then
-			self.Highlight.Adornee = (highlightobject or self.Target)
-		end
+		self.Highlight.Adornee = (highlightobject or self.Target)
 
 		if self.Label.Text ~= "" then
 			Label.Position = Vector2.new(To.X, To.Y - 35)
