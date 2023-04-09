@@ -10,15 +10,12 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Root = LocalPlayer.Character:WaitForChild("HumanoidRootPart")
 
+local ESP = {}
 local Module = {}
 local Tracer = {}
 Tracer.__index = Tracer
 local TracerFunctions = {}
 TracerFunctions.__index = TracerFunctions
-
-function isInstance(object)
-	return pcall(game.IsA, object, "Instance")
-end
 
 Module.new = function(highlightenabled)
 	local self = setmetatable({}, Tracer)
@@ -41,7 +38,16 @@ Module.new = function(highlightenabled)
 	return self
 end
 
+function Module:HasESP(object)
+	return ESP[object]
+end
+
+
 function Tracer:Bind(object, highlightobject)
+	if ESP[object] then
+		return ESP[object] -- self
+	end
+	
 	local self = setmetatable(self, TracerFunctions)
 	self.__index = function(selfTable, index)
 		assert(self.Disconnected, "Tracer:: Disconnected, cannot use functions.")
@@ -86,6 +92,7 @@ function Tracer:Bind(object, highlightobject)
 		if self.HighlightEnabled then
 			self.Highlight:Destroy()
 		end
+		ESP[object] = nil
 		Line:Remove()
 		Label:Remove()
 	end
@@ -113,6 +120,8 @@ function Tracer:Bind(object, highlightobject)
 		Line.From = Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y)
 		Line.To = Vector2.new(To.X, To.Y)
 	end)
+	
+	ESP[object] = self
 
 	return self
 end
