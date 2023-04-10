@@ -64,7 +64,7 @@ function Tracer:Bind(object, highlightobject)
 	self.TextSize = 15
 
 	local Line = Drawing.new("Line")
-	Line.Thickness = 2
+	Line.Thickness = 1
 	Line.Transparency = 1
 	Line.ZIndex = 1
 
