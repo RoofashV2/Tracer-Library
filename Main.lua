@@ -61,6 +61,7 @@ function Tracer:Bind(object, highlightobject)
 	self.TracerId = HttpService:GenerateGUID(false)
 	self.Color = Color3.fromRGB(255, 255, 255)
 	self.Label = Drawing.new("Text")
+	self.TextSize = 15
 
 	local Line = Drawing.new("Line")
 	Line.Thickness = 2
@@ -71,7 +72,7 @@ function Tracer:Bind(object, highlightobject)
 	Label.Visible = true
 	Label.Center = true
 	Label.Outline = true
-	Label.Size = 30
+	Label.Size = self.TextSize
 	Label.Font = 2
 	Label.Text = ""
 	Label.Color = self.Color
@@ -107,11 +108,12 @@ function Tracer:Bind(object, highlightobject)
 		end
 		
 		self.Highlight.Adornee = (highlightobject or self.Target)
-
+		
 		if self.Label.Text ~= "" then
 			Label.Position = Vector2.new(To.X, To.Y - 35)
 			Label.Visible = OnScreen
 			Label.Color = self.Color
+			Label.Size = self.TextSize
 		end
 
 		Line.Color = self.Color
