@@ -48,7 +48,7 @@ function Tracer:Bind(object, highlightobject)
 		print(object, "has esp")
 		return ESP[object] -- self
 	end
-	
+
 	local self = setmetatable(self, TracerFunctions)
 	self.__index = function(selfTable, index)
 		assert(self.Disconnected, "Tracer:: Disconnected, cannot use functions.")
@@ -106,9 +106,9 @@ function Tracer:Bind(object, highlightobject)
 		if self.Highlight then
 			self.Highlight.OutlineColor = self.Color
 		end
-		
+
 		self.Highlight.Adornee = (highlightobject or self.Target)
-		
+
 		if self.Label.Text ~= "" then
 			Label.Position = Vector2.new(To.X, To.Y - 35)
 			Label.Visible = OnScreen
@@ -121,7 +121,7 @@ function Tracer:Bind(object, highlightobject)
 		Line.From = Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y)
 		Line.To = Vector2.new(To.X, To.Y)
 	end)
-	
+
 	ESP[object] = self
 
 	return self
@@ -161,10 +161,6 @@ function TracerFunctions:SetColor(color)
 	if type(color) == "userdata" then
 		if color.R or color.G or color.B then
 			self.Color = color
-			if self.Target:FindFirstChild(self.TracerId) then
-				local BillboardGui = self.Target:FindFirstChild(self.TracerId)
-				BillboardGui.TextLabel.TextColor3 = self.Color
-			end
 			return
 		end
 	end
